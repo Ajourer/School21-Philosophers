@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <pthread.h>
+# define DEAD 1
 
 typedef struct		s_philos 
 {
@@ -19,8 +20,8 @@ typedef struct		s_philos
 	unsigned long	start_t;
 	pthread_t		*th;
 	pthread_mutex_t	*forks;
-	pthread_mutex_t	print;
-	pthread_mutex_t death;
+	pthread_mutex_t	*print;
+	pthread_mutex_t *death;
 }					t_philos;
 
 typedef struct	s_person
@@ -43,5 +44,6 @@ void			take_fork(t_person *person);
 void			eating(t_person *person);
 void			sleeping(t_person *person);
 void			thinking(t_person *person);
+void			dying(t_person *person);
 
 #endif

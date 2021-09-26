@@ -1,10 +1,12 @@
 #include "philosophers.h"
 
-int	init_mutex(t_philos *philos)
+static int	init_mutex(t_philos *philos)
 {
 	int	i;
 
 	philos->forks = malloc(sizeof(pthread_mutex_t) * philos->phil_num);
+	philos->print = malloc(sizeof(pthread_mutex_t));
+	philos->death = malloc(sizeof(pthread_mutex_t));
 	if (!(philos->forks))
 		return (printf("Error: malloc\n"));
 	i = -1;
@@ -13,13 +15,13 @@ int	init_mutex(t_philos *philos)
 		if (pthread_mutex_init(&philos->forks[i], NULL) != 0)
 			return (printf("Error: mutex init"));
 	}
-	if (pthread_mutex_init(&philos->print, NULL) != 0 ||
-			pthread_mutex_init(&philos->death_block, NULL) != 0)
+	if (pthread_mutex_init(philos->print, NULL) != 0 ||
+			pthread_mutex_init(philos->death, NULL) != 0)
 		return (printf("Error: mutex init"));
 	return (0);
 }
 
-int init_philos(int argc, char **argv, t_philos *philos)
+static int init_philos(int argc, char **argv, t_philos *philos)
 {
 	philos->phil_num = ft_atoi(argv[1]);
 	philos->time_to_die = ft_atoi(argv[2]);
@@ -31,7 +33,7 @@ int init_philos(int argc, char **argv, t_philos *philos)
 		philos->num_of_meals = -1;
 	philos->th = malloc(sizeof(pthread_t) * philos->phil_num);
 	if (!(philos->th))
-		return (printf("Error: malloc\n");
+		return (printf("Error: malloc\n"));
 	if (init_mutex(philos) != 0)
 		return (-1);
 	philos->sim_state = philos->phil_num;
@@ -39,7 +41,7 @@ int init_philos(int argc, char **argv, t_philos *philos)
 	return (0);
 }
 
-void init_persons(t_philos *philos, t_person *person)
+static void init_persons(t_philos *philos, t_person *person)
 {
 	int	i;
 	int	n;
@@ -57,6 +59,21 @@ void init_persons(t_philos *philos, t_person *person)
 	}
 }
 
+static void	free_all(t_philos *philos, t_person *person)
+{
+	int	i;
+
+	i = -1;
+	while (++i < philos->phil_num)
+		pthread_mutex_destroy(&philos->forks[i]);
+	pthread_mutex_destroy(philos->print);
+	pthread_mutex_destroy(philos->death);
+	free(philos->forks);
+	free(philos->print);
+	free(philos->death);
+	free(person);
+}
+
 int	main(int argc, char **argv)
 {
 	int			i;
@@ -71,6 +88,6 @@ int	main(int argc, char **argv)
 	init_persons(&philos, person);
 	if (run_threads(&philos, person) != 0)
 		return (-1);
-	
+	free_all(&philos, person);
 	return (0);
 }

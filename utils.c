@@ -58,7 +58,7 @@ unsigned long get_time(void)
 	struct	timeval tv;
 
 	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 
 int	action_time(t_person *person)
@@ -68,9 +68,9 @@ int	action_time(t_person *person)
 
 void	ft_usleep(unsigned long interval)
 {
-	int	end;
+	unsigned long start;
 
-	end = get_time() + interval;
-	while (get_time() < end)
-		usleep(100);
+	start = get_time();
+	while(get_time() - start < interval)
+		usleep(500);
 }
