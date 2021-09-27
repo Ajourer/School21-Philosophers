@@ -15,13 +15,13 @@ static int	init_mutex(t_philos *philos)
 		if (pthread_mutex_init(&philos->forks[i], NULL) != 0)
 			return (printf("Error: mutex init"));
 	}
-	if (pthread_mutex_init(philos->print, NULL) != 0 ||
-			pthread_mutex_init(philos->death, NULL) != 0)
+	if (pthread_mutex_init(philos->print, NULL) != 0
+		|| pthread_mutex_init(philos->death, NULL) != 0)
 		return (printf("Error: mutex init"));
 	return (0);
 }
 
-static int init_philos(int argc, char **argv, t_philos *philos)
+static int	init_philos(int argc, char **argv, t_philos *philos)
 {
 	philos->phil_num = ft_atoi(argv[1]);
 	philos->time_to_die = ft_atoi(argv[2]);
@@ -41,7 +41,7 @@ static int init_philos(int argc, char **argv, t_philos *philos)
 	return (0);
 }
 
-static void init_persons(t_philos *philos, t_person *person)
+static void	init_persons(t_philos *philos, t_person *person)
 {
 	int	i;
 	int	n;
@@ -54,8 +54,8 @@ static void init_persons(t_philos *philos, t_person *person)
 		person[i].id = i + 1;
 		person[i].meals_num = philos->num_of_meals;
 		person[i].time_of_death = get_time() + philos->time_to_die;
-		person[i].left_fork = philos->forks[i];
-		person[i].right_fork = philos->forks[(i + 1) % n];
+		person[i].left_fork = &philos->forks[i];
+		person[i].right_fork = &philos->forks[(i + 1) % n];
 	}
 }
 
@@ -76,7 +76,6 @@ static void	free_all(t_philos *philos, t_person *person)
 
 int	main(int argc, char **argv)
 {
-	int			i;
 	t_philos	philos;
 	t_person	*person;
 

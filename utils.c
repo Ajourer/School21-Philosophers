@@ -11,8 +11,8 @@ int	ft_atoi(const char *str)
 	nb = 0;
 	if (str[i] == '\0')
 		return (0);
-	while (str[i] == '\t' || str[i] == '\n' || str[i] == '\v' ||
-		   str[i] == '\f' || str[i] == '\r' || str[i] == ' ')
+	while (str[i] == '\t' || str[i] == '\n' || str[i] == '\v'
+		|| str[i] == '\f' || str[i] == '\r' || str[i] == ' ')
 		++i;
 	if (str[i] == '-' || str[i] == '+')
 	{
@@ -29,7 +29,7 @@ int	ft_atoi(const char *str)
 	return (nb);
 }
 
-int parse_params(int argc, char **argv)
+int	parse_params(int argc, char **argv)
 {
 	int	i;
 	int	j;
@@ -53,9 +53,9 @@ int parse_params(int argc, char **argv)
 	return (0);
 }
 
-unsigned long get_time(void)
+unsigned long	get_time(void)
 {
-	struct	timeval tv;
+	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
@@ -68,9 +68,9 @@ int	action_time(t_person *person)
 
 void	ft_usleep(unsigned long interval)
 {
-	unsigned long start;
+	unsigned long	start;
 
 	start = get_time();
-	while(get_time() - start < interval)
+	while (get_time() - start < interval)
 		usleep(500);
 }

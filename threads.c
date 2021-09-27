@@ -2,18 +2,18 @@
 
 void	*even_philos(void *p)
 {
-	t_person *person;
+	t_person	*person;
 
 	person = (t_person *)p;
 	while (person->philos->sim_state != 0 && person->philos->num_of_meals != 0)
 	{
-		pthread_mutex_lock(&person->right_fork);
+		pthread_mutex_lock(person->right_fork);
 		take_fork(person);
-		pthread_mutex_lock(&person->left_fork);
+		pthread_mutex_lock(person->left_fork);
 		take_fork(person);
 		eating(person);
-		pthread_mutex_unlock(&person->right_fork);
-		pthread_mutex_unlock(&person->left_fork);
+		pthread_mutex_unlock(person->right_fork);
+		pthread_mutex_unlock(person->left_fork);
 		sleeping(person);
 		thinking(person);
 		usleep(100);
@@ -23,18 +23,18 @@ void	*even_philos(void *p)
 
 void	*odd_philos(void *p)
 {
-	t_person *person;
+	t_person	*person;
 
 	person = (t_person *)p;
 	while (person->philos->sim_state != 0 && person->philos->num_of_meals != 0)
 	{
-		pthread_mutex_lock(&person->left_fork);
+		pthread_mutex_lock(person->left_fork);
 		take_fork(person);
-		pthread_mutex_lock(&person->right_fork);
+		pthread_mutex_lock(person->right_fork);
 		take_fork(person);
 		eating(person);
-		pthread_mutex_unlock(&person->left_fork);
-		pthread_mutex_unlock(&person->right_fork);
+		pthread_mutex_unlock(person->left_fork);
+		pthread_mutex_unlock(person->right_fork);
 		sleeping(person);
 		thinking(person);
 		usleep(100);
@@ -54,7 +54,7 @@ static int	dead_or_alive(t_person *person)
 
 static void	simulation_check(t_person *person, unsigned long phil_num)
 {
-	unsigned long i;
+	unsigned long	i;
 
 	usleep(100);
 	while (1)
@@ -64,8 +64,8 @@ static void	simulation_check(t_person *person, unsigned long phil_num)
 		{
 			if (person[i].philos->sim_state == 0)
 				return ;
-			if (dead_or_alive(&person[i]) == DEAD && person[i].philos->sim_state != 0
-					&& person[i].meals_num != 0)
+			if (dead_or_alive(&person[i]) == DEAD
+				&& person[i].philos->sim_state != 0 && person[i].meals_num != 0)
 			{
 				dying(&person[i]);
 				return ;
@@ -75,7 +75,7 @@ static void	simulation_check(t_person *person, unsigned long phil_num)
 	}
 }
 
-int run_threads(t_philos *philos, t_person *person)
+int	run_threads(t_philos *philos, t_person *person)
 {
 	int	i;
 
@@ -84,12 +84,14 @@ int run_threads(t_philos *philos, t_person *person)
 	{
 		if (i % 2 == 0)
 		{
-			if (pthread_create(&(philos->th[i]), NULL, &even_philos, &(person[i])) != 0)
+			if (pthread_create(&(philos->th[i]), NULL,
+					&even_philos, &(person[i])) != 0)
 				return (printf("Error: pthread_create\n"));
 		}
 		else
 		{
-			if (pthread_create(&(philos->th[i]), NULL, &odd_philos, &(person[i])) != 0)
+			if (pthread_create(&(philos->th[i]), NULL,
+					&odd_philos, &(person[i])) != 0)
 				return (printf("Error: pthread_create\n"));
 		}
 	}

@@ -1,15 +1,15 @@
 #ifndef PHILOSOPHERS_H
 # define PHILOSOPHERS_H
 
-#include <unistd.h>
-#include <stdio.h>
-#include <pthread.h>
-#include <stdlib.h>
-#include <sys/time.h>
-#include <pthread.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <pthread.h>
+# include <stdlib.h>
+# include <sys/time.h>
+# include <pthread.h>
 # define DEAD 1
 
-typedef struct		s_philos 
+typedef struct s_philos
 {
 	int				phil_num;
 	int				time_to_die;
@@ -21,17 +21,17 @@ typedef struct		s_philos
 	pthread_t		*th;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	*print;
-	pthread_mutex_t *death;
-}					t_philos;
+	pthread_mutex_t	*death;
+}				t_philos;
 
-typedef struct	s_person
+typedef struct s_person
 {
 	t_philos		*philos;
 	int				id;
 	int				meals_num;
 	unsigned long	time_of_death;
-	pthread_mutex_t	left_fork;
-	pthread_mutex_t	right_fork;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
 }				t_person;
 
 int				ft_atoi(const char *str);
