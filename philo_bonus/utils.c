@@ -1,4 +1,4 @@
-#include "philosophers.h"
+#include "philo_bonus.h"
 
 int	ft_atoi(const char *str)
 {

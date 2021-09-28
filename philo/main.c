@@ -71,6 +71,7 @@ static void	free_all(t_philos *philos, t_person *person)
 	free(philos->forks);
 	free(philos->print);
 	free(philos->death);
+	free(philos->th);
 	free(person);
 }
 

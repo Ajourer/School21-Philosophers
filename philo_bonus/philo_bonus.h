@@ -1,5 +1,5 @@
-#ifndef PHILOSOPHERS_H
-# define PHILOSOPHERS_H
+#ifndef PHILO_BONUS_H
+# define PHILO_BONUS_H
 
 # include <unistd.h>
 # include <stdio.h>
@@ -7,7 +7,11 @@
 # include <stdlib.h>
 # include <sys/time.h>
 # include <pthread.h>
+# include <string.h>
+# include <semaphore.h>
+# include <signal.h>
 # define DEAD 1
+# define FULL 1
 
 typedef struct s_philos
 {
@@ -17,21 +21,20 @@ typedef struct s_philos
 	int				time_to_sleep;
 	int				num_of_meals;
 	int				sim_state;
+	int				count;
 	unsigned long	start_t;
-	pthread_t		*th;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	*print;
-	pthread_mutex_t	*death;
+	sem_t			*forks;
+	sem_t			*took_both;
+	sem_t			*print;
+	sem_t			*death;
 }				t_philos;
 
 typedef struct s_person
 {
 	t_philos		*philos;
 	int				id;
-	int				meals_num;
 	unsigned long	time_of_death;
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*right_fork;
+	pthread_t		th;
 }				t_person;
 
 int				ft_atoi(const char *str);
@@ -39,11 +42,12 @@ int				parse_params(int argc, char **argv);
 unsigned long	get_time(void);
 int				action_time(t_person *person);
 void			ft_usleep(unsigned long interval);
-int				run_threads(t_philos *philos, t_person *person);
 void			take_fork(t_person *person);
 void			eating(t_person *person);
 void			sleeping(t_person *person);
 void			thinking(t_person *person);
 void			dying(t_person *person);
+void			create_processes(pid_t *philo_pid, t_philos *philos);
+void			end_processes(pid_t *philo_pid, t_philos *philos);
 
 #endif

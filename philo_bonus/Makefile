@@ -2,7 +2,7 @@ NAME = philo_bonus
 
 SRCS = main.c \
 	   utils.c \
-	   threads.c \
+	   processes.c \
 	   actions.c \
 
 OBJS = $(SRCS:.c=.o)
@@ -11,7 +11,7 @@ CFLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 
-$(NAME): $(OBJS) philosophers.h
+$(NAME): $(OBJS) philo_bonus.h
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 clean:
